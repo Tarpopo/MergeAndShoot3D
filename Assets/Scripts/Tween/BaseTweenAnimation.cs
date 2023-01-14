@@ -19,4 +19,5 @@ public abstract class BaseTweenAnimation
     public abstract void SetStartValues();
 
     public abstract void SetEndValues();
+    public void SetRectTransform(RectTransform transform) => _rectTransform = transform;
 }

@@ -13,7 +13,7 @@ public class AnimationComponent
 #endif
     [SerializeField] private Animator _animator;
     [SerializeReference] private Enum _animations;
-    private Enum _currentState = null;
+    private Enum _currentState;
 #if UNITY_EDITOR
     [Button]
     private void UpdateAnimator()
@@ -23,12 +23,10 @@ public class AnimationComponent
 #endif
     public void PlayAnimation(Enum animationType)
     {
-        _animator.SetBool(_currentState.ToString(), false);
+        if (_currentState != null) _animator.SetBool(_currentState.ToString(), false);
         _currentState = animationType;
         _animator.SetBool(_currentState.ToString(), true);
     }
-
-    // public void SetSpeed(float speed) => _animator.SetFloat(AnimatorConstants.Speed, speed);
 }
 
 public enum UnitAnimations
@@ -36,8 +34,8 @@ public enum UnitAnimations
     Idle,
     Walk,
     Run,
-    Light,
-    Quack,
-    Landing,
-    Death,
+    FirstAttack,
+    SecondAttack,
+    TakeDamage,
+    Death
 }

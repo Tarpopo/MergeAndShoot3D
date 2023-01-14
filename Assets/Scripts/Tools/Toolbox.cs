@@ -35,6 +35,7 @@ public class Toolbox : Singleton<Toolbox>
 
     private void Awake()
     {
+        Application.targetFrameRate = 60;
         foreach (var managerBase in Resources.FindObjectsOfTypeAll<ManagerBase>()) Add(managerBase);
         SceneManager.sceneLoaded += SceneChanged;
         SceneManager.sceneUnloaded += ClearScene;
