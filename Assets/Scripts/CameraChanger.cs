@@ -5,21 +5,21 @@ using UnityEngine;
 
 public class CameraChanger : ManagerBase, IAwake
 {
+    public CinemachineVirtualCamera CurrentCamera { get; private set; }
     [SerializeField] private float _delay;
     [SerializeField] private CinemachineBlendDefinition.Style _defaultBlend;
     [SerializeField] private CinemachineBrain _cinemachineBrain;
     [SerializeField] private CinemachineVirtualCamera[] _virtualCameras;
     [SerializeField] private CinemachineVirtualCamera _characterCamera;
-    private CinemachineVirtualCamera _currentCamera;
 
     public void OnAwake()
     {
         _cinemachineBrain = FindObjectOfType<CinemachineBrain>();
         _cinemachineBrain.m_DefaultBlend.m_Style = _defaultBlend;
-        _currentCamera = _virtualCameras[0];
+        CurrentCamera = _virtualCameras[0];
     }
 
-    public void SetCameraFollow(Transform follow) => _currentCamera.Follow = follow;
+    public void SetCameraFollow(Transform follow) => CurrentCamera.Follow = follow;
 
     public void ChangeCamera(int cameraIndex)
     {
@@ -31,17 +31,17 @@ public class CameraChanger : ManagerBase, IAwake
 
     private void SetCurrentCamera(CinemachineVirtualCamera camera)
     {
-        _currentCamera.Priority = 0;
-        _currentCamera = camera;
-        _currentCamera.Priority = 10;
+        CurrentCamera.Priority = 0;
+        CurrentCamera = camera;
+        CurrentCamera.Priority = 10;
     }
 
     public void ChangeCamera(int cameraIndex,
         CinemachineBlendDefinition.Style blend = CinemachineBlendDefinition.Style.EaseIn)
     {
         _cinemachineBrain.m_DefaultBlend.m_Style = blend;
-        _currentCamera.Priority = 0;
-        _currentCamera.Priority = 10;
+        CurrentCamera.Priority = 0;
+        CurrentCamera.Priority = 10;
     }
 
     public void ChangeCameraWithDelay(int cameraIndex) => StartCoroutine(ChangeCameraEnumerator(cameraIndex));

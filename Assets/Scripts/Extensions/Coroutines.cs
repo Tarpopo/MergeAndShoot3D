@@ -12,14 +12,14 @@ public static class Coroutines
         for (int i = 0; i < steps; i++)
         {
             transform.localScale += delta;
-            yield return Waiters.fixedUpdate;
+            yield return Waiters.FixedUpdate;
         }
 
         delta = (startScale - transform.localScale) / steps;
         for (int i = 0; i < steps; i++)
         {
             transform.localScale += delta;
-            yield return Waiters.fixedUpdate;
+            yield return Waiters.FixedUpdate;
         }
 
         transform.localScale = startScale;

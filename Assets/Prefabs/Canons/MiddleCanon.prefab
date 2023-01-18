@@ -1520,6 +1520,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2031877294495689852, guid: d67fdd38591498f4e94d02c20f394a65,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 2031877294495689852, guid: d67fdd38591498f4e94d02c20f394a65,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.644
+      objectReference: {fileID: 0}
     - target: {fileID: 4210017811968602593, guid: d67fdd38591498f4e94d02c20f394a65,
         type: 3}
       propertyPath: _weaponType

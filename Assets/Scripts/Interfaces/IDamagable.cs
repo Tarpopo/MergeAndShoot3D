@@ -1,6 +1,11 @@
+using System;
+
 namespace Interfaces
 {
-    public interface IDamagable
+    public interface IDamageable
     {
+        public bool IsAlive { get; }
+        event Action<IDamageable> OnDie;
+        void TakeDamage(int damage);
     }
 }

@@ -26,7 +26,7 @@ namespace FSM
 
         public void ChangeState<V>() where V : State<T>
         {
-            if (CurrentState.IsStatePlay()) return;
+            if (CurrentState.IsStatePlay() || CurrentState is V) return;
             var newState = _states.FirstOrDefault(elem => elem is V);
             CurrentState.Exit();
             CurrentState = newState;

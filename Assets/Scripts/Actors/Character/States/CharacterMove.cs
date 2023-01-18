@@ -13,7 +13,7 @@ public class CharacterMove : State<CharacterData>
 
     public override void PhysicsUpdate()
     {
-        Data.Weapon.RotateWheels();
+        Data.Canon.RotateWheels(1);
     }
 
     public override void Exit()

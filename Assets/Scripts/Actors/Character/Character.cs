@@ -1,20 +1,48 @@
+using System;
+using DG.Tweening;
 using FSM;
+using Interfaces;
 using UnityEngine;
 
-public class Character : MonoBehaviour
+public class Character : MonoBehaviour, IDamageable
 {
+    public bool IsAlive => _health.IsDeath == false;
+    public event Action<IDamageable> OnDie;
+    [SerializeReference] private Health _health;
     [SerializeField] private CharacterData _characterData;
     private StateMachine<CharacterData> _stateMachine;
+    private Quaternion _startRotation;
+    public void TakeDamage(int damage) => _health.ReduceHealth(damage, () => OnDie?.Invoke(this));
+
+    public void Shoot()
+    {
+        if (_characterData.EnemySpawner.TryGetClosetEnemy(transform, out var enemy) == false) return;
+        _characterData.Canon.TryShoot(enemy.TargetPoint);
+    }
+
+    private void SetDeathState(IDamageable character) => _stateMachine.ChangeState<CharacterDeath>();
 
     private void Start()
     {
+        _startRotation = transform.rotation;
+        OnDie += SetDeathState;
         _stateMachine = new StateMachine<CharacterData>();
         _stateMachine.AddState(new CharacterIdle(_characterData, _stateMachine));
         _stateMachine.AddState(new CharacterMove(_characterData, _stateMachine));
+        _stateMachine.AddState(new CharacterAttack(_characterData, _stateMachine));
+        _stateMachine.AddState(new CharacterDeath(_characterData, _stateMachine));
         _stateMachine.Initialize<CharacterIdle>();
-        var pointMover = Toolbox.Get<PointMover>();
+        TryMoveToNextPoint();
+        Toolbox.Get<EnemySpawner>().OnAllEnemiesDie += TryMoveToNextPoint;
+    }
+
+    private void OnEnable() => _health.ResetHealth();
+
+    private void TryMoveToNextPoint()
+    {
+        transform.DORotateQuaternion(_startRotation, _characterData.RotateDuration);
         _stateMachine.ChangeState<CharacterMove>();
-        pointMover.MoveToPoint(transform, _characterData.MoveDuration, SetIdleState);
+        Toolbox.Get<PointMover>().MoveToPoint(transform, _characterData.MoveDuration, SetIdleState);
     }
 
     private void SetIdleState() => _stateMachine.ChangeState<CharacterIdle>();

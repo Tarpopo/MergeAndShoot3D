@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PointMover : ManagerBase
 {
+    public event Action<int> OnEndMoveToPoint;
     [SerializeField] private Ease _ease;
     [SerializeField] private Transform[] _points;
     private Transform _currentPoint => _points[_currentIndex];
@@ -20,6 +21,7 @@ public class PointMover : ManagerBase
         tween.onComplete += () =>
         {
             Toolbox.Get<CameraChanger>().ChangeCamera(_currentIndex);
+            OnEndMoveToPoint?.Invoke(_currentIndex);
             if (setNextPoint) TrySetNextPoint();
             onEnd?.Invoke();
         };

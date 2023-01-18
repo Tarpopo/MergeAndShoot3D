@@ -2,7 +2,7 @@
 
 public static class Waiters
 {
-    public readonly static WaitForSeconds second = new WaitForSeconds(1);
-    public readonly static WaitForSeconds halfSecond = new WaitForSeconds(0.5f);
-    public readonly static WaitForFixedUpdate fixedUpdate = new WaitForFixedUpdate();
+    public static readonly WaitForSeconds Second = new(1);
+    public static readonly WaitForSeconds HalfSecond = new(0.5f);
+    public static readonly WaitForFixedUpdate FixedUpdate = new WaitForFixedUpdate();
 }
