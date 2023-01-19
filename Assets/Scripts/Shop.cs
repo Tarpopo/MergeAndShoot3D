@@ -12,7 +12,7 @@ public class Shop : ManagerBase, IStart
     [Header("Money")] [SerializeField] private PunchScale _punchScale;
     [SerializeField] private TMP_Text _moneyCount;
     [SerializeField] private RectTransform _moneyTransfrom;
-    [SerializeField] private int _startMoney;
+    [SerializeField] private int _startMoney = 100;
 
     [Header("ShopItems")] [SerializeField] private GameObject _buyButton;
     [SerializeField] private RectTransform _cellTransform;
@@ -36,6 +36,16 @@ public class Shop : ManagerBase, IStart
     {
         if (moneyCount <= 0) return;
         _currentMoney += moneyCount;
+        UpdateMoneyText();
+    }
+
+    public void TryBuyHealth()
+    {
+        if (_currentMoney - 100 < 0) return;
+        var characterHealth = FindObjectOfType<Character>().Health;
+        if (characterHealth == null || characterHealth.IsFull || characterHealth.IsDeath) return;
+        characterHealth.ResetHealth();
+        _currentMoney -= 100;
         UpdateMoneyText();
     }
 

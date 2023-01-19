@@ -3,18 +3,23 @@ using UnityEngine;
 
 public class Timer
 {
-    private float _time;
+    public float CurrentTime { get; private set; }
     private Action _onTimerEnded;
-    public bool IsTick => _time > 0;
-    public void StartTimer(float time,Action onEndTimer)
+    private Action _onUpdateTimer;
+    public bool IsTick => CurrentTime > 0;
+
+    public void StartTimer(float time, Action onEndTimer, Action onUpdate = null)
     {
-        _time = time;
+        CurrentTime = time;
         _onTimerEnded = onEndTimer;
+        _onUpdateTimer = onUpdate;
     }
+
     public void UpdateTimer()
     {
-        if (_time <= 0) return;
-        _time -= Time.deltaTime;
-        if (_time <= 0) _onTimerEnded?.Invoke();
+        if (CurrentTime <= 0) return;
+        CurrentTime -= Time.deltaTime;
+        _onUpdateTimer?.Invoke();
+        if (CurrentTime <= 0) _onTimerEnded?.Invoke();
     }
 }

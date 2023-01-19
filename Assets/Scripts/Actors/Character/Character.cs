@@ -7,6 +7,7 @@ using UnityEngine;
 public class Character : MonoBehaviour, IDamageable
 {
     public bool IsAlive => _health.IsDeath == false;
+    public Health Health => _health;
     public event Action<IDamageable> OnDie;
     [SerializeReference] private Health _health;
     [SerializeField] private CharacterData _characterData;
@@ -17,7 +18,7 @@ public class Character : MonoBehaviour, IDamageable
     public void Shoot()
     {
         if (_characterData.EnemySpawner.TryGetClosetEnemy(transform, out var enemy) == false) return;
-        _characterData.Canon.TryShoot(enemy.TargetPoint);
+        _characterData.Canon.TryShoot();
     }
 
     private void SetDeathState(IDamageable character) => _stateMachine.ChangeState<CharacterDeath>();

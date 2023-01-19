@@ -6,8 +6,9 @@ using UnityEngine.Events;
 public class Health
 {
     public bool IsDeath => _currentHealth <= 0;
+    public bool IsFull => _currentHealth == _maxHealth;
     public int CurrentHealth => _currentHealth;
-    [SerializeField] protected int _health;
+    [SerializeField] protected int _maxHealth;
     [SerializeField] private UnityEvent _onTakeDamage;
 
     public event UnityAction OnTakeDamage
@@ -26,5 +27,5 @@ public class Health
         _onTakeDamage?.Invoke();
     }
 
-    public virtual void ResetHealth() => _currentHealth = _health;
+    public virtual void ResetHealth() => _currentHealth = _maxHealth;
 }

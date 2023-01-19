@@ -6,6 +6,7 @@ using UnityEngine;
 public abstract class BaseTweenAnimation
 {
     public bool Join => _join;
+    public float Duration => _duration;
     [SerializeField] protected RectTransform _rectTransform;
     [SerializeField] protected float _duration;
     [SerializeField] private bool _join;

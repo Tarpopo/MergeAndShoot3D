@@ -648,7 +648,7 @@ MonoBehaviour:
     - rid: 8610615722150199298
       type: {class: Health, ns: , asm: Assembly-CSharp}
       data:
-        _health: 25
+        _maxHealth: 70
         _onTakeDamage:
           m_PersistentCalls:
             m_Calls: []

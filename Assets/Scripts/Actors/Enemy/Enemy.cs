@@ -2,6 +2,7 @@ using System;
 using FSM;
 using Interfaces;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Enemy : MonoBehaviour, IDamageable
 {
@@ -17,7 +18,11 @@ public class Enemy : MonoBehaviour, IDamageable
     public void TakeDamage(int damage)
     {
         SetTakeDamageState();
-        _health.ReduceHealth(damage, () => OnDie?.Invoke(this));
+        _health.ReduceHealth(damage, () =>
+        {
+            Toolbox.Get<Shop>().AddMoney(Random.Range(50, 100));
+            OnDie?.Invoke(this);
+        });
     }
 
     public void ApplyDamage() => _enemyData.PlayerDamageable.TakeDamage(_enemyData.Damage);
