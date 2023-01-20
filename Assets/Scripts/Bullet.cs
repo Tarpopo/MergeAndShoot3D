@@ -1,9 +1,11 @@
 using DefaultNamespace;
 using Interfaces;
+using NaughtyAttributes;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour, IBullet
 {
+    [SerializeField, Tag] private string _damageable;
     [SerializeField] private int _damage;
     [SerializeField] private float _lifeTime;
     private Timer _timer;
@@ -39,6 +41,7 @@ public class Bullet : MonoBehaviour, IBullet
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.tag.Equals(_damageable) == false) return;
         if (other.TryGetComponent<IDamageable>(out var damagable) == false) return;
         damagable.TakeDamage(Random.Range(_damage / 2, _damage));
         DestroyBullet();

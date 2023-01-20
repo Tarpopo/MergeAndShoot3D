@@ -30,7 +30,7 @@ public abstract class BaseTriggerChecker
     {
     }
 
-    public void OnTriggerEnter2D(Collider2D other)
+    public void OnTriggerEnter(Collider other)
     {
         var gameObject = other.gameObject;
         if (IsThisObject(gameObject) == false) return;
@@ -38,7 +38,7 @@ public abstract class BaseTriggerChecker
         _onObjectEnter?.Invoke();
     }
 
-    public void OnTriggerExit2D(Collider2D other)
+    public void OnTriggerExit(Collider other)
     {
         var gameObject = other.gameObject;
         if (IsThisObject(gameObject) == false) return;

@@ -1,9 +1,11 @@
+using System;
 using DefaultNamespace;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour, ICanon
 {
     public WeaponType WeaponType => _weaponType;
+    [SerializeField] private ParticleSystem _onEnableParticles;
     [SerializeField] private AnimationComponent _animationComponent;
     [SerializeField] private float _bulletMoveSpeed;
     [SerializeField] private GameObject _bullet;
@@ -29,6 +31,8 @@ public class Weapon : MonoBehaviour, ICanon
     }
 
     public void DoIdleAnimation() => _animationComponent.PlayAnimation(WeaponAnimations.Idle);
+
+    private void OnEnable() => _onEnableParticles.Play();
 }
 
 public enum WeaponAnimations

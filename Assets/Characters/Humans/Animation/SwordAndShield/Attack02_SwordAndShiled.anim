@@ -33290,8 +33290,8 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.36666667
-    functionName: SetIdleState
+  - time: 0.4
+    functionName: SetIdleAnimation
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

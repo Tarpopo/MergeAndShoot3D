@@ -8,7 +8,7 @@ public class TriggerChecker : MonoBehaviour
     public void SetBaseTriggerChecker(BaseTriggerChecker baseTriggerChecker) =>
         _baseTriggerChecker = baseTriggerChecker;
 
-    private void OnTriggerEnter2D(Collider2D other) => _baseTriggerChecker?.OnTriggerEnter2D(other);
+    private void OnTriggerEnter(Collider other) => _baseTriggerChecker?.OnTriggerEnter(other);
 
-    private void OnTriggerExit2D(Collider2D other) => _baseTriggerChecker?.OnTriggerExit2D(other);
+    private void OnTriggerExit(Collider other) => _baseTriggerChecker?.OnTriggerExit(other);
 }
