@@ -40,7 +40,7 @@ public class Bullet : MonoBehaviour, IBullet
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<IDamageable>(out var damagable) == false) return;
-        damagable.TakeDamage(_damage);
+        damagable.TakeDamage(Random.Range(_damage / 2, _damage));
         DestroyBullet();
     }
 }

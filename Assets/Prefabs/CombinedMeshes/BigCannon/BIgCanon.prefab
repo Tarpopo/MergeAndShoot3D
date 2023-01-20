@@ -288,7 +288,7 @@ MonoBehaviour:
     _animations:
       rid: 8610615747245244417
   _bulletMoveSpeed: 40
-  _bullet: {fileID: 6871457252593478206, guid: 478ef38ee5bafe44ebeab73abc2b8725, type: 3}
+  _bullet: {fileID: 4807678315128456590, guid: 2bb32796e48884047bda66414c8ac6e8, type: 3}
   _wheels:
     _rotators:
     - {fileID: 5892313558573798}

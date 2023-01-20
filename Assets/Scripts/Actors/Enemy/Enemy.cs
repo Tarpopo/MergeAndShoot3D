@@ -1,6 +1,7 @@
 using System;
 using FSM;
 using Interfaces;
+using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -9,7 +10,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public bool IsAlive => _health.IsDeath == false;
     public event Action<IDamageable> OnDie;
     public Vector3 TargetPoint => _targetPoint.position;
-    [SerializeReference] private Health _health;
+    [SerializeField] private ShowHideHealthUI _health;
     [SerializeField] private Transform _targetPoint;
     [SerializeField] private Quaternion _startRotation;
     [SerializeField] private EnemyData _enemyData;
@@ -18,6 +19,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public void TakeDamage(int damage)
     {
         SetTakeDamageState();
+        Toolbox.Get<MeshTextSpawner>().SpawnText(damage.ToString(), Color.red, TargetPoint);
         _health.ReduceHealth(damage, () =>
         {
             Toolbox.Get<Shop>().AddMoney(Random.Range(50, 100));
@@ -55,7 +57,11 @@ public class Enemy : MonoBehaviour, IDamageable
         _stateMachine.Initialize<EnemyMove>();
     }
 
-    private void Update() => _stateMachine.CurrentState.LogicUpdate();
+    private void Update()
+    {
+        _stateMachine.CurrentState.LogicUpdate();
+        _health.Update();
+    }
 
     private void FixedUpdate() => _stateMachine.CurrentState.PhysicsUpdate();
 

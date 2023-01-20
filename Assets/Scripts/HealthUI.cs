@@ -6,7 +6,7 @@ using UnityEngine.UI;
 [Serializable]
 public class HealthUI : Health
 {
-    [SerializeField] private Image _progressBar;
+    [SerializeField] protected Image _progressBar;
     [SerializeReference] private BaseTweenAnimation _baseTween;
     private float _deltaValue;
     private Tween _tween;

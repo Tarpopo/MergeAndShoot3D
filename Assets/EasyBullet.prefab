@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1168571835}
   - component: {fileID: -4186493380450188160}
   m_Layer: 0
-  m_Name: Bullet
+  m_Name: EasyBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ac5d4136f75fba40b687edef05fd547, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damage: 10
+  _damage: 20
   _lifeTime: 1
 --- !u!54 &-4186493380450188160
 Rigidbody:
