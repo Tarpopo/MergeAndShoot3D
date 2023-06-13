@@ -12,14 +12,14 @@ public class ShootBoosterSlider : MonoBehaviour
     [SerializeField] private float _fillTime;
     [SerializeReference] private BaseTweenAnimation _baseTween;
     private readonly Timer _timer = new Timer();
-    private Tween _tween;
+    // private Tween _tween;
     private Action _onUpdate;
 
     private void Start()
     {
-        _tween = _baseTween.GetTween();
-        _tween.Pause();
-        _tween.SetAutoKill(false);
+        // _tween = _baseTween.GetTween();
+        // _tween.Pause();
+        // _tween.SetAutoKill(false);
         _progressBar.fillAmount = 1;
         _baseTween.SetStartValues();
         var userInput = Toolbox.Get<UserInput>();
@@ -30,9 +30,9 @@ public class ShootBoosterSlider : MonoBehaviour
 
     private void FixedUpdate() => _timer.UpdateTimer();
 
-    private void DoEnableAnimation() => _tween.PlayForward();
+    private void DoEnableAnimation() => _baseTween.PlayForward();
 
-    private void DoDisableAnimation() => _tween.PlayBackwards();
+    private void DoDisableAnimation() => _baseTween.PlayBackwards();
 
     private void Fill()
     {

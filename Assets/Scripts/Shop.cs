@@ -26,9 +26,9 @@ public class Shop : ManagerBase, IStart
 
     public void OnStart()
     {
-        _cellMerger = Toolbox.Get<CellMerger>();
-        AddMoney(_startMoney);
-        TryBuyNewItem();
+        // _cellMerger = Toolbox.Get<CellMerger>();
+        // AddMoney(_startMoney);
+        // TryBuyNewItem();
     }
 
     [Button]
@@ -42,11 +42,11 @@ public class Shop : ManagerBase, IStart
     public void TryBuyHealth()
     {
         if (_currentMoney - 100 < 0) return;
-        var characterHealth = FindObjectOfType<Character>().Health;
-        if (characterHealth == null || characterHealth.IsFull || characterHealth.IsDeath) return;
-        characterHealth.ResetHealth();
-        _currentMoney -= 100;
-        UpdateMoneyText();
+        // var characterHealth = FindObjectOfType<Character>().Health;
+        // if (characterHealth == null || characterHealth.IsFull || characterHealth.IsDeath) return;
+        // characterHealth.ResetHealth();
+        // _currentMoney -= 100;
+        // UpdateMoneyText();
     }
 
     public void TryBuyNewItem()

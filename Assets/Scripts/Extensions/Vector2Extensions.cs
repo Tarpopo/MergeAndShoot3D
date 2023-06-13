@@ -31,4 +31,6 @@ public static class Vector2Extensions
         value.y += y;
         return value;
     }
+
+    public static Vector3 ConvertToXZ(this Vector2 value) => new Vector3(value.x, 0, value.y);
 }

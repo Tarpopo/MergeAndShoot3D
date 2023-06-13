@@ -11,12 +11,12 @@ public class MoveAnimation : BaseTweenAnimation
     public override void OnStart()
     {
         base.OnStart();
-        if (_startPosition.Equals(Vector3.zero)) _startPosition = _rectTransform.anchoredPosition3D;
+        if (_startPosition.Equals(Vector3.zero)) _startPosition = _rectTransform.anchoredPosition;
     }
 
     public override void SetStartValues() => _rectTransform.anchoredPosition = _startPosition;
 
     public override void SetEndValues() => _rectTransform.anchoredPosition = _endPosition;
 
-    public override Tween GetTween() => _rectTransform.DOLocalMove(_endPosition, _duration);
+    public override Tween GetTween() => _rectTransform.DOAnchorPos(_endPosition, _duration);
 }
