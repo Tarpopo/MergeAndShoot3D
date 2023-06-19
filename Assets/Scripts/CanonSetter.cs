@@ -9,17 +9,17 @@ public class CanonSetter : MonoBehaviour
     private void Start()
     {
         Toolbox.Get<CellMerger>().OnMerge += TryActiveWeapon;
-        CurrentCanon = _weapons[0];
+        // CurrentCanon = _weapons[0];
         CurrentCanon.Enable();
     }
 
     private void TryActiveWeapon(WeaponType weaponType)
     {
-        if (CurrentCanon.WeaponType.Equals(weaponType)) return;
-        var weapon = _weapons.FirstOrDefault(item => item.WeaponType.Equals(weaponType));
-        if (weapon == null) return;
-        CurrentCanon.Disable();
-        CurrentCanon = weapon;
-        CurrentCanon.Enable();
+        // if (CurrentCanon.WeaponType.Equals(weaponType)) return;
+        // var weapon = _weapons.FirstOrDefault(item => item.WeaponType.Equals(weaponType));
+        // if (weapon == null) return;
+        // CurrentCanon.Disable();
+        // CurrentCanon = weapon;
+        // CurrentCanon.Enable();
     }
 }

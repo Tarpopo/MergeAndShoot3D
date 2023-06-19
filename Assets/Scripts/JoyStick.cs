@@ -8,12 +8,13 @@ public class JoyStick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public bool IsActive => _isActive && JoystickDirection.magnitude >= _joystickSo.MinActiveRadius;
 
-    // [SerializeField] private OnRoll _onRollEvent;
+    [SerializeField] private OnRoll _onRollEvent;
     [SerializeField] private JoystickSO _joystickSo;
     [SerializeField] private RectTransform _canvas;
     [SerializeField] private RectTransform _outsideCircle;
     [SerializeField] private RectTransform _insideCircle;
     private bool _isActive;
+    private Vector2 _direction = Vector2.zero;
 
     // [SerializeField] private RectTransform _arrowTransform;
 
@@ -25,7 +26,7 @@ public class JoyStick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     private void FixedUpdate()
     {
-        if (IsActive) _joystickSo.OnJoystickMove.Invoke(JoystickDirection);
+        if (IsActive) _joystickSo.OnJoystickMove.Invoke(_direction);
     }
 
     private void EnableJoystick()
@@ -40,6 +41,7 @@ public class JoyStick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         _outsideCircle.gameObject.SetActive(false);
         JoystickDirection = Vector2.zero;
         _insideCircle.localPosition = Vector3.zero;
+        // _joystickSo.OnJoystickMove.Invoke(JoystickDirection);
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -52,7 +54,8 @@ public class JoyStick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        // if ((eventData.position - _startPosition).magnitude > _joystickSo.RadiusInsideCircle) _onRollEvent.Invoke();
+        if ((eventData.position - _startPosition).magnitude >= _joystickSo.RadiusInsideCircle)
+            _onRollEvent.Invoke(JoystickDirection);
         DisableJoystick();
         _joystickSo.OnJoystickUp.Invoke();
     }
@@ -63,11 +66,16 @@ public class JoyStick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         var magnitude = JoystickDirection.magnitude;
         var position = JoystickDirection.normalized * Mathf.Clamp(magnitude, 0, _joystickSo.RadiusInsideCircle);
         _insideCircle.anchoredPosition = position;
+        _direction = new Vector2(Lerp01(position.x, _joystickSo.RadiusInsideCircle),
+            Lerp01(position.y, _joystickSo.RadiusInsideCircle));
+        // print(Mathf.InverseLerp(-_joystickSo.RadiusInsideCircle, _joystickSo.RadiusInsideCircle, position.x));
         // _arrowTransform.anchoredPosition = position;
         // SetActiveInside(magnitude < _joystickSo.RadiusInsideCircle);
         // SetArrowRotate(JoystickDirection.normalized);
     }
 
+    private float Lerp01(float value, float maxValue) =>
+        Mathf.Sign(value) * Mathf.Lerp(0, 1, Mathf.InverseLerp(0, maxValue, Mathf.Abs(value)));
     // private void SetActiveInside(bool touchInside)
     // {
     //     _cicle.SetActive(touchInside);
