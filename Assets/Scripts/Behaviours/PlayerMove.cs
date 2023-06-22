@@ -2,18 +2,21 @@ using UnityEngine;
 
 public class PlayerMove : IMove
 {
-    private readonly Rigidbody _rigidbody;
-    private readonly Transform _transform;
-    private readonly AnimationComponent _animationComponent;
-    private readonly RigidbodyMove _rigidbodyMove;
+    private Rigidbody _rigidbody;
+    private Transform _transform;
+    private AnimationComponent _animationComponent;
+    private RigidbodyMove _rigidbodyMove;
+    private TargetRotator _targetRotator;
     private bool _active = true;
 
-    public PlayerMove(Transform transform, Rigidbody rigidbody, AnimationComponent animationComponent)
+    public PlayerMove(Transform transform, Rigidbody rigidbody, AnimationComponent animationComponent,
+        TargetRotator targetRotator)
     {
         _transform = transform;
         _rigidbody = rigidbody;
         _animationComponent = animationComponent;
         _rigidbodyMove = new RigidbodyMove(rigidbody);
+        _targetRotator = targetRotator;
     }
 
     public void Move(Vector3 direction, float moveSpeed, float rotationSpeed)
@@ -35,8 +38,8 @@ public class PlayerMove : IMove
         var y = Vector3.Dot(_transform.forward, rhs);
         var x = Vector3.Dot(_transform.right, rhs);
         _animationComponent.PlayMoveAnimation(new Vector2(x, y));
-        _transform.forward = Vector3.Lerp(_rigidbody.transform.forward, moveDirection.normalized,
-            Time.deltaTime * rotationSpeed);
+        if (_targetRotator.Active) return;
+        _transform.forward = Vector3.Lerp(_rigidbody.transform.forward, moveDirection.normalized, rotationSpeed);
     }
 
     public void StopMove() => _rigidbody.velocity = Vector2.zero;

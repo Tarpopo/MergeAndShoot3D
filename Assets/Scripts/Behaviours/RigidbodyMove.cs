@@ -8,5 +8,5 @@ public class RigidbodyMove : IMove
     public void Move(Vector3 direction, float moveSpeed) =>
         _rigidbody.MovePosition(_rigidbody.position + direction.normalized * moveSpeed);
 
-    public void StopMove() => _rigidbody.velocity = Vector2.zero;
+    public void StopMove() => _rigidbody.velocity = Vector3.zero;
 }

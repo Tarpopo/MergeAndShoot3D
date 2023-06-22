@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: BodyUp
+  m_Mask: 00000000010000000100000000000000000000000100000001000000010000000100000000000000000000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Armature
+    m_Weight: 1
+  - m_Path: Armature/Hips
+    m_Weight: 1
+  - m_Path: Armature/Hips/LThigh
+    m_Weight: 1
+  - m_Path: Armature/Hips/LThigh/LCalf
+    m_Weight: 1
+  - m_Path: Armature/Hips/LThigh/LCalf/LCalf_end
+    m_Weight: 1
+  - m_Path: Armature/Hips/RThigh
+    m_Weight: 1
+  - m_Path: Armature/Hips/RThigh/RCalf
+    m_Weight: 1
+  - m_Path: Armature/Hips/RThigh/RCalf/RCalf_end
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine1
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine1/Spine2
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine1/Spine2/Head
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine1/Spine2/Head/Head_end
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine1/Spine2/LBicep
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine1/Spine2/LBicep/LForearm
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine1/Spine2/LBicep/LForearm/LForearm_end
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine1/Spine2/RBicep
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine1/Spine2/RBicep/RForearm
+    m_Weight: 1
+  - m_Path: Armature/Hips/Spine1/Spine2/RBicep/RForearm/RForearm_end
+    m_Weight: 1
+  - m_Path: Man.005
+    m_Weight: 1

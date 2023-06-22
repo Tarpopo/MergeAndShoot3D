@@ -35,24 +35,35 @@ public class RollMove : IMove
         var moveDirection = Quaternion.AngleAxis(Helpers.Camera.transform.rotation.eulerAngles.y, Vector3.up) *
                             direction.ConvertToXZ().normalized;
         _rigidbody.transform.forward = moveDirection;
-        _monoBehaviour.StartCoroutine(_startPosition.LerpValue(
-            _startPosition + _rigidbody.transform.forward * _rollData.RollDistance, 0f, _rollData.RollDuration,
-            SetPosition, null, () =>
-            {
-                IsRoll = false;
-                onRollEnd?.Invoke();
-            }));
+        // _monoBehaviour.StartCoroutine(_startPosition.LerpValue(
+        //     _startPosition + _rigidbody.transform.forward * _rollData.RollDistance, 0f, _rollData.RollDuration,
+        //     SetPosition, null, () =>
+        //     {
+        //         IsRoll = false;
+        //         onRollEnd?.Invoke();
+        //     }));
+        _monoBehaviour.Timer(_rollData.RollDuration, null, () =>
+        {
+            IsRoll = false;
+            onRollEnd?.Invoke();
+        });
     }
 
     public void StopMove()
     {
     }
 
-    private void SetPosition(Vector3 position, float timeValue)
+    private void SetPosition(Vector3 position, float time)
     {
-        _rigidbody.transform.position = position; //.WithY(_startPosition.y + _rollData.YCurve.Evaluate(timeValue));
-        // _rigidbody.transform.position = _giveDamage
-        //     ? _rigidbody.transform.position.WithY(_startPosition.y + _rollData.YCurve.Evaluate(timeValue))
-        //     : position.WithY(_startPosition.y + _rollData.YCurve.Evaluate(timeValue));
+        _rigidbody.MovePosition(position);
+        // var direction = position - _rigidbody.position;
+    }
+
+    public void Move()
+    {
+        if (IsRoll == false) return;
+        _rigidbody.MovePosition(_rigidbody.position + _rigidbody.transform.forward * _rollData.RollSpeed);
+        // var direction = position - _rigidbody.position;
+        // _rigidbody.MovePosition(_rigidbody.position + direction);
     }
 }

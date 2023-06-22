@@ -1,13 +1,9 @@
 using System;
-using Triggers;
 using UnityEngine;
 
 [Serializable]
 public class CharacterData : BaseActorData
 {
-    public ComponentsTriggerCollector<Enemy> EnemyTriggerCollector { get; private set; } =
-        new ComponentsTriggerCollector<Enemy>();
-
     public ICanon Canon => canonSetter.CurrentCanon;
     public EnemySpawner EnemySpawner => _enemySpawner;
     public AttackDurationSetter AttackDurationSetter => _attackDurationSetter;
@@ -17,6 +13,7 @@ public class CharacterData : BaseActorData
     public float RotateDuration => _rotateDuration;
     public float MoveSpeed => _moveSpeed;
     public float RotateSpeed => _rotateSpeed;
+    public float WeightSetSpeed => _weightSetSpeed;
 
     [SerializeField] private CanonSetter canonSetter;
     [SerializeField] private EnemySpawner _enemySpawner;
@@ -26,4 +23,5 @@ public class CharacterData : BaseActorData
     [SerializeField] private float _rotateDuration;
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _rotateSpeed;
+    [SerializeField] private float _weightSetSpeed;
 }

@@ -117,8 +117,8 @@ public static class Vector3Extensions
         {
             onValueUpdated?.Invoke(Vector3.Lerp(startValue, endValue, elapsed / duration), elapsed / duration);
             onUpdated?.Invoke();
-            elapsed += Time.deltaTime;
-            yield return null;
+            elapsed += Time.fixedDeltaTime;
+            yield return Helpers.GetWait(Time.fixedDeltaTime);
         }
 
         onValueUpdated?.Invoke(Vector3.Lerp(startValue, endValue, 1), 1);

@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: New Roll Data
   m_EditorClassIdentifier: 
   _afterRollDelay: 0
-  _rollDuration: 0.4
-  _rollDistance: 4.5
+  _rollDuration: 0.6
+  _rollDistance: 5
+  _rollSpeed: 0.2
   _yMultiply: 0
   _yCurve:
     serializedVersion: 2

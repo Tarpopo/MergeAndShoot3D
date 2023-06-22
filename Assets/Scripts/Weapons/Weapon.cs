@@ -1,13 +1,9 @@
-using System;
-using DefaultNamespace;
 using NaughtyAttributes;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour//, ICanon
+public class Weapon : MonoBehaviour //, ICanon
 {
-    [SerializeField] private OnJoystickUp _onJoystickUp;
-    [SerializeField] private OnJoystickMove _onJoystickMove;
-    [SerializeField] private Transform _rotatable;
+    // [SerializeField] private OnJoystickUp _onJoystickUp;
     [SerializeField] private Transform _shootPoint;
     [SerializeField] private float _shootDelay;
     [SerializeField] private BaseBulletPool _bulletPool;
@@ -20,24 +16,21 @@ public class Weapon : MonoBehaviour//, ICanon
         if (_timer.IsTick) return;
         _timer.StartTimer(_shootDelay, null);
         var bullet = _bulletPool.Get();
-        bullet.StartMove(_shootPoint.position, _shootPoint.right, _ignoreTags);
+        bullet.StartMove(_shootPoint.position, _shootPoint.forward, _ignoreTags);
     }
 
-    private void RotateWeapon(Vector2 direction) => _rotatable.right = direction.normalized;
-
-    private void OnEnable()
-    {
-        _onJoystickMove.Subscribe(RotateWeapon);
-        _onJoystickUp.Subscribe(TryShoot);
-    }
-
-    private void OnDisable()
-    {
-        _onJoystickMove.Unsubscribe(RotateWeapon);
-        _onJoystickUp.Unsubscribe(TryShoot);
-    }
+    // private void OnEnable()
+    // {
+    //     _onJoystickUp.Subscribe(TryShoot);
+    // }
+    //
+    // private void OnDisable()
+    // {
+    //     _onJoystickUp.Unsubscribe(TryShoot);
+    // }
 
     private void Start() => _bulletPool.Load();
+
     private void Update() => _timer.UpdateTimer();
     // public WeaponType WeaponType => _weaponType;
     // [SerializeField] private ParticleSystem _onEnableParticles;

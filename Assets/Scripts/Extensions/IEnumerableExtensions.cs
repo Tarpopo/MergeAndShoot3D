@@ -27,13 +27,13 @@ namespace Extensions
             return minPoint;
         }
 
-        public static T GetClosestElement<T>(this IEnumerable<T> list, Vector3 point) where T : ITransform
+        public static T GetClosestTarget<T>(this IEnumerable<T> list, Vector3 point) where T : ITarget
         {
             var minDistance = Mathf.Infinity;
             T minPoint = default;
             foreach (var element in list)
             {
-                var distance = Vector3.Distance(element.Transform.position, point);
+                var distance = Vector3.Distance(element.Target.position, point);
                 if (distance > minDistance) continue;
                 minDistance = distance;
                 minPoint = element;

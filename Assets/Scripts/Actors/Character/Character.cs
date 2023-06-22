@@ -1,27 +1,27 @@
 using System;
-using FSM;
 using Interfaces;
+using RootMotion.FinalIK;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class Character : MonoBehaviour, IDamageable
 {
-    public bool IsAlive => true; //_health.IsDeath == false;
+    public bool IsAlive => true;
 
+    //_health.IsDeath == false;
     // public Health Health => _health;
     public event Action<IDamageable> OnDie;
 
     // [SerializeReference] private Health _health;
+    [SerializeField] private Weapon _weapon;
+    [SerializeField] private TagTriggerChecker<ITarget> _tagTriggerChecker;
     [SerializeField] private CharacterData _characterData;
     [SerializeField] private RollData _rollData;
     [SerializeField] private OnJoystickMove _onJoystickMove;
     [SerializeField] private OnJoystickUp _onJoystickUp;
-    [SerializeField] private TargetRotator _targetRotator;
     [SerializeField] private OnRoll _onRoll;
-    private StateMachine<CharacterData> _stateMachine;
-
-    private Quaternion _startRotation;
-
-    // private RigidbodyMove _rigidbodyMove;
+    [SerializeField] private AimIK _aimIK;
+    private TargetRotator _targetRotator;
     private PlayerMove _playerMove;
     private RollMove _rollMove;
 
@@ -30,102 +30,71 @@ public class Character : MonoBehaviour, IDamageable
         // _health.ReduceHealth(damage, () => OnDie?.Invoke(this));
     }
 
+    [Button]
+    public void SetFrameRate(int frameRate) => Application.targetFrameRate = frameRate;
+
     public void Shoot()
     {
-        if (_characterData.EnemySpawner.TryGetClosetEnemy(transform, out var enemy) == false) return;
-        _characterData.Canon.TryShoot();
+        // if (_characterData.EnemySpawner.TryGetClosetEnemy(transform, out var enemy) == false) return;
+        // _characterData.Canon.TryShoot();
+        _characterData.AnimationComponent.PlayAnimation(UnitAnimations.FirstAttack);
+        _weapon.TryShoot();
     }
-
-    public void SetIdleAnimation()
-    {
-        if (_rollMove.IsRoll) return;
-        _characterData.AnimationComponent.PlayAnimation(UnitAnimations.Idle);
-    }
-
-    private void SetDeathState(IDamageable character) => _stateMachine.ChangeState<CharacterDeath>();
-
-    // private void OnEnable() => _health.ResetHealth();
 
     private void Awake()
     {
         var rigidbody = GetComponent<Rigidbody>();
-        // _rigidbodyMove = new RigidbodyMove(rigidbody, _characterData.AnimationComponent);
-        _playerMove = new PlayerMove(transform, rigidbody, _characterData.AnimationComponent);
         _rollMove = new RollMove(_rollData, rigidbody, _characterData.AnimationComponent, this);
-        // _startRotation = transform.rotation;
-        // OnDie += SetDeathState;
-        // _stateMachine = new StateMachine<CharacterData>();
-        // _stateMachine.AddState(new CharacterIdle(_characterData, _stateMachine));
-        // _stateMachine.AddState(new CharacterMove(_characterData, _stateMachine));
-        // _stateMachine.AddState(new CharacterAttack(_characterData, _stateMachine));
-        // _stateMachine.AddState(new CharacterDeath(_characterData, _stateMachine));
-        // _stateMachine.Initialize<CharacterIdle>();
-        // TryMoveToNextPoint();
-        // Toolbox.Get<EnemySpawner>().OnAllEnemiesDie += TryMoveToNextPoint;
-        // _characterData.EnemyTriggerCollector.OnGetObject += SetAttackState;
-        // _characterData.EnemyTriggerCollector.OnLostObject += TrySetIdleState;
-        // _characterData.ShootBoosterSlider.OnFastEnd += _characterData.AttackDurationSetter.SetRegularDuration;
-        // _characterData.ShootBoosterSlider.OnFastSet += _characterData.AttackDurationSetter.SetFastDuration;
-        // _characterData.AttackDurationSetter.SetRegularDuration();
+        _targetRotator = new TargetRotator(transform, _aimIK, _tagTriggerChecker, _rollMove);
+        _playerMove = new PlayerMove(transform, rigidbody, _characterData.AnimationComponent, _targetRotator);
+        Application.targetFrameRate = 60;
     }
 
     private void OnEnable()
     {
         _onJoystickMove.Subscribe(Move);
-        _onJoystickUp.Subscribe(SetIdleAnimation);
+        _onJoystickUp.Subscribe(StopMove);
+        _onJoystickUp.Subscribe(Shoot);
+        // _rollMove.onRollStart += _targetRotator.Disable;
         _rollMove.onRollStart += _playerMove.Disable;
+        // _rollMove.onRollEnd += _targetRotator.Enable;
         _rollMove.onRollEnd += _playerMove.Enable;
-        _rollMove.onRollEnd += SetIdleAnimation;
+        _rollMove.onRollEnd += StopMove;
         _onRoll.Subscribe(_rollMove.Move);
     }
 
     private void OnDisable()
     {
         _onJoystickMove.Unsubscribe(Move);
-        _onJoystickUp.Unsubscribe(SetIdleAnimation);
+        _onJoystickUp.Unsubscribe(StopMove);
+        _onJoystickUp.Unsubscribe(Shoot);
+        // _rollMove.onRollStart -= _targetRotator.Disable;
         _rollMove.onRollStart -= _playerMove.Disable;
+        // _rollMove.onRollEnd -= _targetRotator.Enable;
         _rollMove.onRollEnd -= _playerMove.Enable;
-        _rollMove.onRollEnd -= SetIdleAnimation;
+        _rollMove.onRollEnd -= StopMove;
         _onRoll.Unsubscribe(_rollMove.Move);
     }
 
-    private void Move(Vector2 moveDirection)
+    private void Move(Vector2 moveDirection) => _playerMove.Move(moveDirection.ConvertToXZ(), _characterData.MoveSpeed,
+        _characterData.RotateSpeed);
+
+    private void StopMove()
     {
-        // var move = Quaternion.AngleAxis(transform.eulerAngles.y, Vector3.up) * moveDirection.ConvertToXZ();
-        // var sign = Mathf.Abs(moveDirection.y) > Mathf.Abs(moveDirection.x) ? -1 : 1;
-        //sign * new Vector2(move.x, move.z)
-        // _characterData.AnimationComponent.PlayMoveAnimation(new Vector2(
-        //     -Mathf.Sign(_targetRotator.TargetDirection.x) * moveDirection.x,
-        //     -Mathf.Sign(_targetRotator.TargetDirection.z) * moveDirection.y));
-        _playerMove.Move(moveDirection.ConvertToXZ(), _characterData.MoveSpeed, _characterData.RotateSpeed);
+        if (_rollMove.IsRoll) return;
+        _characterData.AnimationComponent.PlayAnimation(UnitAnimations.Idle);
+        _playerMove.StopMove();
     }
 
     private void FixedUpdate()
     {
-        // _targetRotator.UpdateRotation();
+        _rollMove.Move();
+        _targetRotator.Update(_characterData.RotateSpeed);
     }
-    // private void TryMoveToNextPoint()
-    // {
-    //     transform.DORotateQuaternion(_startRotation, _characterData.RotateDuration);
-    //     _stateMachine.ChangeState<CharacterMove>();
-    //     Toolbox.Get<PointMover>().MoveToPoint(transform, _characterData.MoveDuration, SetIdleState);
-    // }
 
-    // private void TrySetIdleState()
-    // {
-    //     if (_characterData.EnemyTriggerCollector.HaveElements) return;
-    //     _stateMachine.ChangeState<CharacterIdle>();
-    // }
-    //
-    // private void SetAttackState() => _stateMachine.ChangeState<CharacterAttack>();
-    //
-    // private void SetIdleState() => _stateMachine.ChangeState<CharacterIdle>();
-    //
-    // private void Update() => _stateMachine.CurrentState.LogicUpdate();
-    //
-    // private void FixedUpdate() => _stateMachine.CurrentState.PhysicsUpdate();
-    //
-    // private void OnTriggerEnter(Collider other) => _characterData.EnemyTriggerCollector.OnTriggerEnter(other);
-    //
-    // private void OnTriggerExit(Collider other) => _characterData.EnemyTriggerCollector.OnTriggerExit(other);
+    private void OnTriggerEnter(Collider other) => _tagTriggerChecker.OnTriggerEnter(other);
+
+    private void OnTriggerStay(Collider other) => _tagTriggerChecker.OnTriggerStay(other);
+
+    private void OnTriggerExit(Collider other) => _tagTriggerChecker.OnTriggerExit(other);
 }

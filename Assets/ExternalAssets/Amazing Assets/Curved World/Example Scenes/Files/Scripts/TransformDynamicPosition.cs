@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
 
 namespace AmazingAssets.CurvedWorld.Example
@@ -12,7 +13,7 @@ namespace AmazingAssets.CurvedWorld.Example
 
         public Vector3 offset;
         public bool recalculateRotation;
-               
+
 
         void Start()
         {
@@ -20,22 +21,60 @@ namespace AmazingAssets.CurvedWorld.Example
                 parent = transform.parent;
         }
 
-        void Update()
+        // void Update()
+        // {
+        //     if (parent == null || curvedWorldController == null)
+        //     {
+        //         //Do nothing
+        //     }
+        //     else
+        //     {
+        //         //Transform position
+        //         transform.position = curvedWorldController.TransformPosition(parent.position + offset);
+        //     
+        //     
+        //         //Transform normal (calcualte rotation)
+        //         if (recalculateRotation)
+        //             transform.rotation =
+        //                 curvedWorldController.TransformRotation(parent.position + offset, parent.forward, parent.right);
+        //     }
+        // }
+
+        private void LateUpdate()
         {
             if (parent == null || curvedWorldController == null)
             {
                 //Do nothing
             }
-            else 
+            else
             {
                 //Transform position
                 transform.position = curvedWorldController.TransformPosition(parent.position + offset);
-
-
+            
+            
                 //Transform normal (calcualte rotation)
                 if (recalculateRotation)
-                    transform.rotation = curvedWorldController.TransformRotation(parent.position + offset, parent.forward, parent.right);
+                    transform.rotation =
+                        curvedWorldController.TransformRotation(parent.position + offset, parent.forward, parent.right);
             }
         }
+        // private void FixedUpdate()
+        // {
+        //     if (parent == null || curvedWorldController == null)
+        //     {
+        //         //Do nothing
+        //     }
+        //     else
+        //     {
+        //         //Transform position
+        //         transform.position = curvedWorldController.TransformPosition(parent.position + offset);
+        //
+        //
+        //         //Transform normal (calcualte rotation)
+        //         if (recalculateRotation)
+        //             transform.rotation =
+        //                 curvedWorldController.TransformRotation(parent.position + offset, parent.forward, parent.right);
+        //     }
+        // }
     }
 }

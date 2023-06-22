@@ -5,11 +5,13 @@ using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Enemy : MonoBehaviour, IDamageable
+public class Enemy : MonoBehaviour, IDamageable, ITarget
 {
+    public Transform Target => _target;
     public bool IsAlive => _health.IsDeath == false;
     public event Action<IDamageable> OnDie;
     public Vector3 TargetPoint => _targetPoint.position;
+    [SerializeField] private Transform _target;
     [SerializeField] private ShowHideHealthUI _health;
     [SerializeField] private Transform _targetPoint;
     [SerializeField] private Quaternion _startRotation;
