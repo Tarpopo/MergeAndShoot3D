@@ -1,35 +1,33 @@
 using NaughtyAttributes;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour //, ICanon
+public class Weapon : MonoBehaviour
 {
-    // [SerializeField] private OnJoystickUp _onJoystickUp;
+    [SerializeField] private OnJoystickUp _onJoystickUp;
     [SerializeField] private Transform _shootPoint;
     [SerializeField] private float _shootDelay;
     [SerializeField] private BaseBulletPool _bulletPool;
     [SerializeField, Tag] private string[] _ignoreTags;
-
+    private AnimationComponent _animationComponent;
     private readonly Timer _timer = new Timer();
+
+    public void Init(AnimationComponent animationComponent) => _animationComponent = animationComponent;
 
     public void TryShoot()
     {
         if (_timer.IsTick) return;
-        _timer.StartTimer(_shootDelay, null);
+        _animationComponent.PlayAnimation(UnitAnimations.FirstAttack);
+        _timer.StartTimer(_shootDelay, () => _animationComponent.PlayAnimation(UnitAnimations.Idle));
         var bullet = _bulletPool.Get();
         bullet.StartMove(_shootPoint.position, _shootPoint.forward, _ignoreTags);
     }
 
-    // private void OnEnable()
-    // {
-    //     _onJoystickUp.Subscribe(TryShoot);
-    // }
-    //
-    // private void OnDisable()
-    // {
-    //     _onJoystickUp.Unsubscribe(TryShoot);
-    // }
+    private void OnEnable() => _onJoystickUp.Subscribe(TryShoot);
+
+    private void OnDisable() => _onJoystickUp.Unsubscribe(TryShoot);
 
     private void Start() => _bulletPool.Load();
+
 
     private void Update() => _timer.UpdateTimer();
     // public WeaponType WeaponType => _weaponType;

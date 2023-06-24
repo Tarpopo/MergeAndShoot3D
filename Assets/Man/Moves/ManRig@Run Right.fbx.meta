@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: eeaa02aa908efe64db983d42a73759a1
+guid: affa6d5087830eb42bb9a697b073d10c
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: Pistol Strafe
+    second: Run Right
   externalObjects: {}
   materials:
     materialImportMode: 0
@@ -36,11 +36,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Pistol Strafe
+      name: Run Right
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0
-      lastFrame: 34
+      lastFrame: 30
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

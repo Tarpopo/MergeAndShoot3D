@@ -55,8 +55,8 @@ public class JoyStick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
     {
         if ((eventData.position - _startPosition).magnitude >= _joystickSo.RadiusInsideCircle)
             _onRollEvent.Invoke(JoystickDirection);
+        else _joystickSo.OnJoystickUp.Invoke();
         DisableJoystick();
-        _joystickSo.OnJoystickUp.Invoke();
     }
 
     public void OnDrag(PointerEventData eventData)

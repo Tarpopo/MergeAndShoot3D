@@ -33,13 +33,14 @@ public class Character : MonoBehaviour, IDamageable
     [Button]
     public void SetFrameRate(int frameRate) => Application.targetFrameRate = frameRate;
 
-    public void Shoot()
-    {
-        // if (_characterData.EnemySpawner.TryGetClosetEnemy(transform, out var enemy) == false) return;
-        // _characterData.Canon.TryShoot();
-        _characterData.AnimationComponent.PlayAnimation(UnitAnimations.FirstAttack);
-        _weapon.TryShoot();
-    }
+    // public void Shoot()
+    // {
+    //     // if (_characterData.EnemySpawner.TryGetClosetEnemy(transform, out var enemy) == false) return;
+    //     // _characterData.Canon.TryShoot();
+    //     if (_rollMove.IsRoll) return;
+    //     _characterData.AnimationComponent.PlayAnimation(UnitAnimations.FirstAttack);
+    //     _weapon.TryShoot();
+    // }
 
     private void Awake()
     {
@@ -47,6 +48,7 @@ public class Character : MonoBehaviour, IDamageable
         _rollMove = new RollMove(_rollData, rigidbody, _characterData.AnimationComponent, this);
         _targetRotator = new TargetRotator(transform, _aimIK, _tagTriggerChecker, _rollMove);
         _playerMove = new PlayerMove(transform, rigidbody, _characterData.AnimationComponent, _targetRotator);
+        _weapon.Init(_characterData.AnimationComponent);
         Application.targetFrameRate = 60;
     }
 
@@ -54,7 +56,7 @@ public class Character : MonoBehaviour, IDamageable
     {
         _onJoystickMove.Subscribe(Move);
         _onJoystickUp.Subscribe(StopMove);
-        _onJoystickUp.Subscribe(Shoot);
+        // _onJoystickUp.Subscribe(Shoot);
         // _rollMove.onRollStart += _targetRotator.Disable;
         _rollMove.onRollStart += _playerMove.Disable;
         // _rollMove.onRollEnd += _targetRotator.Enable;
@@ -67,7 +69,7 @@ public class Character : MonoBehaviour, IDamageable
     {
         _onJoystickMove.Unsubscribe(Move);
         _onJoystickUp.Unsubscribe(StopMove);
-        _onJoystickUp.Unsubscribe(Shoot);
+        // _onJoystickUp.Unsubscribe(Shoot);
         // _rollMove.onRollStart -= _targetRotator.Disable;
         _rollMove.onRollStart -= _playerMove.Disable;
         // _rollMove.onRollEnd -= _targetRotator.Enable;
