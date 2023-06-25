@@ -48,7 +48,7 @@ public class Character : MonoBehaviour, IDamageable
         _rollMove = new RollMove(_rollData, rigidbody, _characterData.AnimationComponent, this);
         _targetRotator = new TargetRotator(transform, _aimIK, _tagTriggerChecker, _rollMove);
         _playerMove = new PlayerMove(transform, rigidbody, _characterData.AnimationComponent, _targetRotator);
-        _weapon.Init(_characterData.AnimationComponent);
+        _weapon.Init(_characterData.AnimationComponent, _tagTriggerChecker);
         Application.targetFrameRate = 60;
     }
 
@@ -57,9 +57,7 @@ public class Character : MonoBehaviour, IDamageable
         _onJoystickMove.Subscribe(Move);
         _onJoystickUp.Subscribe(StopMove);
         // _onJoystickUp.Subscribe(Shoot);
-        // _rollMove.onRollStart += _targetRotator.Disable;
         _rollMove.onRollStart += _playerMove.Disable;
-        // _rollMove.onRollEnd += _targetRotator.Enable;
         _rollMove.onRollEnd += _playerMove.Enable;
         _rollMove.onRollEnd += StopMove;
         _onRoll.Subscribe(_rollMove.Move);
@@ -70,9 +68,7 @@ public class Character : MonoBehaviour, IDamageable
         _onJoystickMove.Unsubscribe(Move);
         _onJoystickUp.Unsubscribe(StopMove);
         // _onJoystickUp.Unsubscribe(Shoot);
-        // _rollMove.onRollStart -= _targetRotator.Disable;
         _rollMove.onRollStart -= _playerMove.Disable;
-        // _rollMove.onRollEnd -= _targetRotator.Enable;
         _rollMove.onRollEnd -= _playerMove.Enable;
         _rollMove.onRollEnd -= StopMove;
         _onRoll.Unsubscribe(_rollMove.Move);

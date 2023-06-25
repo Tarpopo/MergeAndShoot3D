@@ -15,7 +15,7 @@ public abstract class BaseBullet : MonoBehaviour
 
     private RigidbodyMove _rigidbodyMove;
     private Timer _timer;
-    private CurvedMover _curvedMover;
+    // private CurvedMover _curvedMover;
 
     public virtual void StartMove(Vector3 startMovePosition, Vector3 moveDirection, string[] ignoreTags)
     {
@@ -30,7 +30,7 @@ public abstract class BaseBullet : MonoBehaviour
 
         _timer = new Timer();
         var controller = FindObjectOfType<CurvedWorldController>();
-        _curvedMover = new CurvedMover(transform, controller.transform, controller);
+        // _curvedMover = new CurvedMover(transform, controller.transform, controller);
         // _transformDynamicPosition.Init(controller.transform, controller);
     }
 
@@ -38,12 +38,12 @@ public abstract class BaseBullet : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        _curvedMover.Move(_moveDirection,_moveSpeed);
-        // _rigidbodyMove.Move(_moveDirection, _moveSpeed);
+        // _curvedMover.Move(_moveDirection,_moveSpeed);
+        _rigidbodyMove.Move(_moveDirection, _moveSpeed);
     }
 
     protected virtual void OnEnable() => _timer.StartTimer(_bulletLlifeTime, DisableBullet);
-    // protected virtual void OnDisable() => _rigidbodyMove.StopMove();
+    protected virtual void OnDisable() => _rigidbodyMove.StopMove();
 
     protected virtual void OnTriggerEnter(Collider collider)
     {

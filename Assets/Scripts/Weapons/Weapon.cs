@@ -1,3 +1,4 @@
+using Extensions;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -10,16 +11,22 @@ public class Weapon : MonoBehaviour
     [SerializeField, Tag] private string[] _ignoreTags;
     private AnimationComponent _animationComponent;
     private readonly Timer _timer = new Timer();
+    private TagTriggerChecker<ITarget> _targetChecker;
 
-    public void Init(AnimationComponent animationComponent) => _animationComponent = animationComponent;
+    public void Init(AnimationComponent animationComponent, TagTriggerChecker<ITarget> targetChecker)
+    {
+        _targetChecker = targetChecker;
+        _animationComponent = animationComponent;
+    }
 
     public void TryShoot()
     {
-        if (_timer.IsTick) return;
+        if (_timer.IsTick || _targetChecker.HaveElements == false) return;
+        var target = (IShootTarget)_targetChecker.Elements.GetClosestTarget(_shootPoint.position);
         _animationComponent.PlayAnimation(UnitAnimations.FirstAttack);
         _timer.StartTimer(_shootDelay, () => _animationComponent.PlayAnimation(UnitAnimations.Idle));
         var bullet = _bulletPool.Get();
-        bullet.StartMove(_shootPoint.position, _shootPoint.forward, _ignoreTags);
+        bullet.StartMove(_shootPoint.position, target.ShootTarget.position - _shootPoint.position, _ignoreTags);
     }
 
     private void OnEnable() => _onJoystickUp.Subscribe(TryShoot);

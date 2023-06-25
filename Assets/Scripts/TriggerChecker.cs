@@ -9,6 +9,7 @@ public class TriggerChecker<T>
     public event Action<T> OnObjectEnter;
     public event Action<T> OnObjectExit;
     public event Action OnAllEnded;
+    [SerializeField] private bool _checkParent;
     public bool HaveElements => _elements.Count > 0;
     public IEnumerable<T> Elements => _elements;
     public T First => _elements.First();
@@ -27,8 +28,10 @@ public class TriggerChecker<T>
 
     public void TryRemoveItem(GameObject gameObject)
     {
-        if (gameObject.TryGetComponent<T>(out var component) == false ||
-            _elements.Contains(component) == false) return;
+        // if (gameObject.TryGetComponent<T>(out var component) == false ||
+        //     _elements.Contains(component) == false) return;
+        if (TryGetComponent(gameObject, out var component) == false) return;
+        if (_elements.Contains(component) == false) return;
         _elements.Remove(component);
         if (HaveElements == false) OnAllEnded?.Invoke();
         OnObjectExit?.Invoke(component);
@@ -45,9 +48,14 @@ public class TriggerChecker<T>
     private void TryAddItem(GameObject gameObject)
     {
         if (IsThisObject(gameObject) == false) return;
-        if (gameObject.TryGetComponent<T>(out var component) == false || _elements.Contains(component)) return;
+        if (TryGetComponent(gameObject, out var component) == false) return;
+        if (_elements.Contains(component)) return;
         _elements.Add(component);
         _lastTransform = gameObject.transform;
         OnObjectEnter?.Invoke(component);
     }
+
+    private bool TryGetComponent(GameObject gameObject, out T component) => _checkParent
+        ? gameObject.transform.parent.TryGetComponent(out component)
+        : gameObject.TryGetComponent(out component);
 }

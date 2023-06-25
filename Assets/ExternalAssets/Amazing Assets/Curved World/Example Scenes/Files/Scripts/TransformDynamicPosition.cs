@@ -14,10 +14,9 @@ namespace AmazingAssets.CurvedWorld.Example
         public Vector3 offset;
         public bool recalculateRotation;
 
-        public void Init(Transform parentTransform, CurvedWorldController worldController)
+        public void Init(CurvedWorldController curvedWorldController)
         {
-            curvedWorldController = worldController;
-            parent = parentTransform;
+            this.curvedWorldController = curvedWorldController;
         }
 
         void Start()
@@ -49,15 +48,12 @@ namespace AmazingAssets.CurvedWorld.Example
         {
             if (parent == null || curvedWorldController == null)
             {
-                //Do nothing
+                if (Application.isPlaying && curvedWorldController == null)
+                    curvedWorldController = FindObjectOfType<CurvedWorldController>();
             }
             else
             {
-                //Transform position
                 transform.position = curvedWorldController.TransformPosition(parent.position + offset);
-
-
-                //Transform normal (calcualte rotation)
                 if (recalculateRotation)
                     transform.rotation =
                         curvedWorldController.TransformRotation(parent.position + offset, parent.forward, parent.right);

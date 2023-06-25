@@ -1,19 +1,19 @@
 using System;
 using FSM;
 using Interfaces;
-using TMPro;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
-public class Enemy : MonoBehaviour, IDamageable, ITarget
+public class Enemy : MonoBehaviour, IDamageable, ITarget, IShootTarget
 {
     public Transform Target => _target;
+    public Transform ShootTarget => _shootTarget;
     public bool IsAlive => _health.IsDeath == false;
     public event Action<IDamageable> OnDie;
-    public Vector3 TargetPoint => _targetPoint.position;
+
+    // public Vector3 TargetPoint => _targetPoint.position;
     [SerializeField] private Transform _target;
     [SerializeField] private ShowHideHealthUI _health;
-    [SerializeField] private Transform _targetPoint;
+    [SerializeField] private Transform _shootTarget;
     [SerializeField] private Quaternion _startRotation;
     [SerializeField] private EnemyData _enemyData;
     private StateMachine<EnemyData> _stateMachine;
@@ -21,12 +21,12 @@ public class Enemy : MonoBehaviour, IDamageable, ITarget
     public void TakeDamage(int damage)
     {
         SetTakeDamageState();
-        Toolbox.Get<MeshTextSpawner>().SpawnText(damage.ToString(), Color.red, TargetPoint);
-        _health.ReduceHealth(damage, () =>
-        {
-            Toolbox.Get<Shop>().AddMoney(Random.Range(50, 100));
-            OnDie?.Invoke(this);
-        });
+        // Toolbox.Get<MeshTextSpawner>().SpawnText(damage.ToString(), Color.red, TargetPoint);
+        // _health.ReduceHealth(damage, () =>
+        // {
+        //     Toolbox.Get<Shop>().AddMoney(Random.Range(50, 100));
+        //     OnDie?.Invoke(this);
+        // });
     }
 
     public void ApplyDamage() => _enemyData.PlayerDamageable.TakeDamage(_enemyData.Damage);
