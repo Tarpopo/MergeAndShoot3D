@@ -1,0 +1,24 @@
+[
+    {
+        "Key": "list",
+        "Value": {
+            "entries": [
+                {
+                    "Key": "EnemyHealth",
+                    "Value": {
+                        "selected": false,
+                        "data": {
+                            "Enemy": {
+                                "IntType": {
+                                    "_int": 90,
+                                    "InitValue": 100,
+                                    "$type": "IntType"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
+]
